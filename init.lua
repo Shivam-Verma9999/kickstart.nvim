@@ -110,7 +110,7 @@ do
   vim.o.number = true
   -- You can also add relative line numbers, to help with jumping.
   --  Experiment for yourself to see if you like it!
-  -- vim.o.relativenumber = true
+  vim.o.relativenumber = true
 
   -- Enable mouse mode, can be useful for resizing splits for example!
   vim.o.mouse = 'a'
@@ -178,6 +178,9 @@ do
   -- Clear highlights on search when pressing <Esc> in normal mode
   --  See `:help hlsearch`
   vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+  vim.keymap.set('i', '<C-c>', '<Esc><Esc>')
+  vim.keymap.set('i', '<C-s>', '<cmd>w<CR>')
+
 
   -- Diagnostic Config & Keymaps
   --  See `:help vim.diagnostic.Opts`
@@ -393,8 +396,42 @@ do
 
   -- Load the colorscheme here.
   -- Like many other themes, this one has different styles, and you could load
-  -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-  vim.cmd.colorscheme 'tokyonight-night'
+
+  -- Download and add the Rose Pine theme natively
+  vim.pack.add { { src = gh 'rose-pine/neovim' } }
+
+  -- Configure Rose Pine with ThePrimeagen's exact muted palette overrides
+  require('rose-pine').setup({
+    variant = 'main',
+    dark_variant = 'main',
+    styles = {
+      transparency = true,
+      italic = false, -- He disables italics for a cleaner, flatter look
+    },
+    
+    -- THIS SECTION WASHES OUT THE BRIGHT COLORS
+    before_highlight = function(group, highlight, palette)
+      -- Mute the bright Pine Green into a washed sage green
+      if highlight.fg == palette.pine then 
+        highlight.fg = "#68998a" 
+      end
+      -- Mute the bright Gold into a softer, washed pastel orange/peach
+      if highlight.fg == palette.gold then 
+        highlight.fg = "#ffaf87" 
+      end
+      -- Mute the bright Foam/Cyan into a desaturated steel blue
+      if highlight.fg == palette.foam then 
+        highlight.fg = "#7eb3c4" 
+      end
+    end,
+  })
+
+  -- Load the colorscheme and enforce background transparency
+  vim.cmd.colorscheme 'rose-pine'
+  vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+  vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+ -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+  --  vim.cmd.colorscheme 'tokyonight-night'
 
   -- Highlight todo, notes, etc in comments
   vim.pack.add { gh 'folke/todo-comments.nvim' }
@@ -687,7 +724,7 @@ do
   ---@type table<string, vim.lsp.Config>
   local servers = {
     -- clangd = {},
-    -- gopls = {},
+        gopls = {},
     -- pyright = {},
     -- rust_analyzer = {},
     --
@@ -696,7 +733,7 @@ do
     --
     -- But for many setups, the LSP (`ts_ls`) will work just fine
     -- ts_ls = {},
-
+    vtsls = {},
     stylua = {}, -- Used to format Lua code
 
     -- Special Lua Config, as recommended by neovim help docs

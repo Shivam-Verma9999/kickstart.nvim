@@ -182,6 +182,33 @@ do
   vim.keymap.set('i', '<C-s>', '<cmd>w<CR>')
 
 
+-- =========================================================================
+-- SAFE CLIPBOARD SYSTEM: DELETES & OVERWRITES NEVER DESTROY YOUR COPIED TEXT
+-- =========================================================================
+
+-- 1. DELETE & CHANGE WITHOUT OVERWRITING (Pushed to Black Hole Register)
+vim.keymap.set({ "n", "v" }, "x", '"_x', { desc = "Delete character without overwriting" })
+vim.keymap.set({ "n", "v" }, "d", '"_d', { desc = "Delete without overwriting" })
+vim.keymap.set({ "n", "v" }, "D", '"_D', { desc = "Delete line forward without overwriting" })
+vim.keymap.set({ "n", "v" }, "c", '"_c', { desc = "Change without overwriting" })
+vim.keymap.set({ "n", "v" }, "C", '"_C', { desc = "Change line forward without overwriting" })
+
+-- 2. PASTE IN VISUAL MODE (With Selection) WITHOUT OVERWRITING
+-- Replaces selected text with your last yanked text without replacing the buffer
+vim.keymap.set("v", "p", '"0p', { desc = "Paste over selection without losing copied text" })
+vim.keymap.set("v", "P", '"0P', { desc = "Paste over selection without losing copied text" })
+
+-- 3. PASTE IN NORMAL MODE (Without Selection) WITHOUT OVERWRITING
+-- Ensures normal pastes always look at the dedicated yank history, ignoring deletes
+vim.keymap.set("n", "p", '"0p', { desc = "Paste after cursor from pure yank buffer" })
+vim.keymap.set("n", "P", '"0P', { desc = "Paste before cursor from pure yank buffer" })
+
+-- 4. OPTIONAL: IF YOU EXPLICITLY WANT TO CUT & MOVE CODE Inside Neovim
+-- Use <leader>d (Space + d) or <leader>x whenever you actually want a standard cut
+vim.keymap.set({ "n", "v" }, "<leader>d", "d", { desc = "Traditional Cut (stores in clipboard)" })
+vim.keymap.set({ "n", "v" }, "<leader>x", "x", { desc = "Traditional Character Cut (stores in clipboard)" })
+
+
   -- Diagnostic Config & Keymaps
   --  See `:help vim.diagnostic.Opts`
   vim.diagnostic.config {
@@ -412,17 +439,11 @@ do
     -- THIS SECTION WASHES OUT THE BRIGHT COLORS
     before_highlight = function(group, highlight, palette)
       -- Mute the bright Pine Green into a washed sage green
-      if highlight.fg == palette.pine then 
-        highlight.fg = "#68998a" 
-      end
-      -- Mute the bright Gold into a softer, washed pastel orange/peach
-      if highlight.fg == palette.gold then 
-        highlight.fg = "#ffaf87" 
-      end
-      -- Mute the bright Foam/Cyan into a desaturated steel blue
-      if highlight.fg == palette.foam then 
-        highlight.fg = "#7eb3c4" 
-      end
+      if highlight.fg == palette.love then highlight.fg = "#b4637a" end -- Soft Rose
+      if highlight.fg == palette.iris then highlight.fg = "#8a7a99" end -- Faded Lavender
+      if highlight.fg == palette.pine then highlight.fg = "#68998a" end -- Sage Green
+      if highlight.fg == palette.gold then highlight.fg = "#ffaf87" end -- gold into softer pastel orange/peach
+      if highlight.fg == palette.foam then highlight.fg = "#7eb3c4" end -- mute bright foam/cyan
     end,
   })
 

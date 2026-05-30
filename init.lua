@@ -104,6 +104,11 @@ do
   -- [[ Setting options ]]
   --  See `:help vim.o`
   -- NOTE: You can change these options as you wish!
+  vim.opt.tabstop = 4          -- Number of spaces a <Tab> counts for
+  vim.opt.softtabstop = 4      -- Number of spaces a <Tab> counts for while editing
+  vim.opt.shiftwidth = 4       -- Size of an indent
+  vim.opt.expandtab = true      -- Transform tabs into spaces
+
   --  For more options, you can see `:help option-list`
 
   -- Make line numbers default
@@ -744,8 +749,8 @@ do
   --  See `:help lsp-config` for information about keys and how to configure
   ---@type table<string, vim.lsp.Config>
   local servers = {
-    -- clangd = {},
-        gopls = {},
+    clangd = {},
+    gopls = {},
     -- pyright = {},
     -- rust_analyzer = {},
     --

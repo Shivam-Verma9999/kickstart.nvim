@@ -99,7 +99,7 @@ do
   vim.g.maplocalleader = ' '
 
   -- Set to true if you have a Nerd Font installed and selected in the terminal
-  vim.g.have_nerd_font = false
+  vim.g.have_nerd_font = true
 
   -- [[ Setting options ]]
   --  See `:help vim.o`
@@ -108,6 +108,7 @@ do
   vim.opt.softtabstop = 4      -- Number of spaces a <Tab> counts for while editing
   vim.opt.shiftwidth = 4       -- Size of an indent
   vim.opt.expandtab = true      -- Transform tabs into spaces
+  vim.opt.guicursor:append 'i:block'
 
   --  For more options, you can see `:help option-list`
 
@@ -161,7 +162,7 @@ do
   --   See `:help lua-options`
   --   and `:help lua-guide-options`
   vim.o.list = true
-  vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+  vim.opt.listchars = { tab = '  ', trail = '·', nbsp = '␣' }
 
   -- Preview substitutions live, as you type!
   vim.o.inccommand = 'split'
